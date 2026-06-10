@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💜 Confession Quest For Auspci 💜</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(-45deg,#ffd6f6,#e8d5ff,#d8f3ff,#ffe7ef);
+background-size:400% 400%;
+animation:bg 15s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.card{
+width:90%;
+max-width:750px;
+padding:35px;
+text-align:center;
+background:rgba(255,255,255,.25);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.3);
+border-radius:30px;
+box-shadow:
+0 0 20px rgba(255,255,255,.4),
+0 0 40px rgba(210,160,255,.3);
+animation:fade 1s;
+z-index:2;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+h1{
+font-size:2.6rem;
+color:#7448b8;
+margin-bottom:15px;
+}
+
+h2{
+color:#7b4bc4;
+margin-bottom:15px;
+}
+
+p{
+font-size:1.05rem;
+color:#444;
+margin:10px 0;
+}
+
+button{
+padding:12px 24px;
+margin:8px;
+border:none;
+border-radius:30px;
+background:#c9a6ff;
+color:white;
+font-size:1rem;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.08);
+box-shadow:0 0 15px #dcb6ff;
+}
+
+.quote{
+margin-top:20px;
+font-style:italic;
+color:#7b4bc4;
+}
+
+.float{
+position:absolute;
+font-size:25px;
+animation:float 10s linear infinite;
+opacity:.6;
+pointer-events:none;
+}
+
+@keyframes float{
+from{
+transform:translateY(110vh) rotate(0deg);
+}
+to{
+transform:translateY(-120px) rotate(360deg);
+}
+}
+
+.glow{
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%,100%{
+text-shadow:0 0 10px #fff;
+}
+50%{
+text-shadow:
+0 0 20px #fff,
+0 0 40px #ffb3ff;
+}
+}
+
+.final{
+color:white;
+}
+
+.final h1{
+font-size:3rem;
+color:white;
+}
+
+.final p{
+color:white;
+}
+
+.signature{
+margin-top:30px;
+padding-top:20px;
+border-top:1px solid rgba(255,255,255,.3);
+}
+
+.typewriter{
+overflow:hidden;
+white-space:nowrap;
+border-right:3px solid white;
+width:0;
+margin:auto;
+animation:
+typing 4s steps(40,end) forwards,
+blink .8s infinite;
+}
+
+@keyframes typing{
+from{width:0}
+to{width:100%}
+}
+
+@keyframes blink{
+50%{border-color:transparent;}
+}
+</style>
+</head>
+
+<body>
+
+<div id="game" class="card"></div>
+
+<script>
+
+const game=document.getElementById("game");
+
+let level=0;
+
+const levels=[
+
+{
+q:"🌱 Easy Level\n\nWhat color is made by mixing blue and yellow?",
+o:["Red","Green","Purple","Black"],
+a:"Green",
+s:"💜 Me gustas más de lo que debería.",
+t:"(I like you more than I probably should.)"
+},
+
+{
+q:"🌸 Easy Level\n\nHow many days are there in a week?",
+o:["5","6","7","8"],
+a:"7",
+s:"🌙 Pienso en ti más de lo que admito.",
+t:"(I think about you more than I admit.)"
+},
+
+{
+q:"🧠 Medium Level\n\nWhat comes once in a minute, twice in a moment, but never in a thousand years?",
+o:["M","T","A","O"],
+a:"M",
+s:"✨ Si fueras un recuerdo, serías mi favorito.",
+t:"(If you were a memory, you'd be my favorite one.)"
+},
+
+{
+q:"🌌 Philosophy\n\nIf a memory is forgotten by everyone, did it ever truly exist?",
+o:["Yes","No","Maybe","Only in traces"],
+a:null,
+s:"💭 Some questions don't have a correct answer.",
+t:""
+},
+
+{
+q:"🌙 Philosophy\n\nWhat hurts more?",
+o:["Losing someone","Never meeting them"],
+a:null,
+s:"💜 Maybe both leave different scars.",
+t:""
+},
+
+{
+q:"🔥 Hard Level\n\nWhat belongs to you but other people use it more than you do?",
+o:["Phone","Name","Bag","Book"],
+a:"Name",
+s:"🌌 Tal vez esto siempre fue una confesión.",
+t:"(Maybe this was always a confession.)"
+}
+
+];
+
+function start(){
+
+game.innerHTML=`
+
+<h1>💜 Confession Quest 💜</h1>
+
+<p>For Auspci</p>
+
+<br>
+
+<p>
+A dreamy journey of quizzes,
+thoughts and hidden feelings...
+</p>
+
+<br>
+
+<h2 class="glow">
+🌎 Earthie
+</h2>
+
+<p>
+#bhumiii<br>
+#1styearconfession
+</p>
+
+<br>
+
+<button onclick="next()">
+Start Journey ✨
+</button>
+
+`;
+
+}
+
+function next(){
+
+if(level>=levels.length){
+ending();
+return;
+}
+
+let q=levels[level];
+
+let buttons="";
+
+q.o.forEach(x=>{
+
+buttons+=`
+<button onclick="answer('${x}')">${x}</button>
+`;
+
+});
+
+game.innerHTML=`
+
+<h2>Level ${level+1}</h2>
+
+<p style="white-space:pre-line;">
+${q.q}
+</p>
+
+${buttons}
+
+<div class="quote">
+
+<br>
+
+<h3>${q.s}</h3>
+
+<p>${q.t}</p>
+
+</div>
+
+`;
+
+}
+
+function answer(choice){
+
+let q=levels[level];
+
+if(q.a===null){
+
+alert("💭 Interesting perspective.");
+level++;
+next();
+return;
+
+}
+
+if(choice===q.a){
+
+alert("✨ Correct!");
+level++;
+next();
+
+}else{
+
+alert("💜 Try again!");
+}
+
+}
+
+function ending(){
+
+document.body.style.background=
+"linear-gradient(135deg,#140820,#24123d,#42205d,#6b3f96)";
+
+game.innerHTML=`
+
+<div class="final">
+
+<h1>🌙 Secret Found</h1>
+
+<br>
+
+<p>
+You answered every question...
+</p>
+
+<p>
+But none of them were
+the real question.
+</p>
+
+<br>
+
+<h2 class="typewriter">
+Maybe this was always a confession...
+</h2>
+
+<br><br>
+
+<p>
+💜 Pienso en ti más de lo que admito.
+</p>
+
+<p>
+(I think about you more than I admit.)
+</p>
+
+<br>
+
+<p>
+🌙 No sé cuándo pasó,
+pero te volviste especial.
+</p>
+
+<p>
+(I don't know when it happened,
+but you became special.)
+</p>
+
+<br>
+
+<p>
+✨ Si fueras un recuerdo,
+serías mi favorito.
+</p>
+
+<p>
+(If you were a memory,
+you'd be my favorite one.)
+</p>
+
+<br><br>
+
+<p>
+Some people enter our lives quietly...
+</p>
+
+<p>
+Yet somehow become
+impossible to forget.
+</p>
+
+<br>
+
+<h2 class="glow">
+💜 For Auspci 💜
+</h2>
+
+<br>
+
+<p>
+Thank you for every conversation,
+every laugh,
+and every little memory.
+</p>
+
+<br>
+
+<div class="signature">
+
+<h1>🌎 Earthie</h1>
+
+<p>
+Made by Earthie for Auspci
+</p>
+
+<br>
+
+<p>
+#bhumiii
+</p>
+
+<p>
+#1styearconfession
+</p>
+
+</div>
+
+<br>
+
+<button onclick="location.reload()">
+Play Again ✨
+</button>
+
+</div>
+
+`;
+
+}
+
+setInterval(()=>{
+
+const e=document.createElement("div");
+
+e.className="float";
+
+const icons=[
+"💜","🌙","✨","🦋","🌸","☁️"
+];
+
+e.innerHTML=
+icons[Math.floor(Math.random()*icons.length)];
+
+e.style.left=Math.random()*100+"vw";
+
+e.style.fontSize=
+(20+Math.random()*25)+"px";
+
+document.body.appendChild(e);
+
+setTimeout(()=>{
+e.remove();
+},10000);
+
+},700);
+
+start();
+
+</script>
+
+</body>
+</html>
